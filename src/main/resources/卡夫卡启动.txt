@@ -1,0 +1,6 @@
+注意的是下面的五个窗口都不能关闭
+1、首先启动zookeeper服务，使用自己的或者使用卡夫卡自带的zookeeper均可	bin\windows\zookeeper-server-start.bat config\zookeeper.properties
+2、然后在启动卡夫卡客户端，进入到卡夫卡安装目录使用命令： bin\windows\kafka-server-start.bat config\server.properties
+3、创建topic     	bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic mvl
+4、启动产生者	bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic mvl
+5、启动接收者	bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic mvl --from-beginning
