@@ -27,10 +27,11 @@ public class KafkaProducer{
         //配置key的序列化类
         props.put("key.serializer.class", "kafka.serializer.StringEncoder");
 
-        //request.required.acks
-        //0, which means that the producer never waits for an acknowledgement from the broker (the same behavior as 0.7). This option provides the lowest latency but the weakest durability guarantees (some data will be lost when a server fails).
-        //1, which means that the producer gets an acknowledgement after the leader replica has received the data. This option provides better durability as the client waits until the server acknowledges the request as successful (only messages that were written to the now-dead leader but not yet replicated will be lost).
-        //-1, which means that the producer gets an acknowledgement after all in-sync replicas have received the data. This option provides the best durability, we guarantee that no messages will be lost as long as at least one in sync replica remains.
+        /**
+         0：这意味着生产者producer不等待来自broker同步完成的确认继续发送下一条（批）消息。此选项提供最低的延迟但最弱的耐久性保证（当服务器发生故障时某些数据会丢失，如leader已死，但producer并不知情，发出去的信息broker就收不到）。
+         1：这意味着producer在leader已成功收到的数据并得到确认后发送下一条message。此选项提供了更好的耐久性为客户等待服务器确认请求成功（被写入死亡leader但尚未复制将失去了唯一的消息）。
+         -1：这意味着producer在follower副本确认接收到数据后才算一次发送完成。 此选项提供最好的耐久性，我们保证没有信息将丢失，只要至少一个同步副本保持存活。三种机制，性能依次递减 (producer吞吐量降低)，数据健壮性则依次递增。
+          **/
         props.put("request.required.acks","-1");
 
         producer = new Producer<String, String>(new ProducerConfig(props));
